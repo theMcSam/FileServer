@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="/login" method="POST">
+    {% csrf_token %}
+    <div algin="center">
+        <table>
+            <tr>
+                <td>First name: </td>
+                <td><input type="fname" name="fname" id="fname"></td>
+            </tr>
+            <tr>
+                <td>Last name: </td>
+                <td><input type="text" name="lname" id="lname"></td>
+            </tr>
+            <tr>
+                <td>Username: </td>
+                <td><input type="text" name="uname" id="name"></td>
+            </tr>
+            <tr>
+                <td>Email: </td>
+                <td><input type="email" name="email" id="email"></td>
+            </tr>
+            <tr>
+                <td>Password: </td>
+                <td><input type="password1" name="passwd2" id="pass1"></td>
+            </tr>
+            <tr>
+                <td>Confirm password: </td>
+                <td><input type="password2" name="passwd2" id="pass2"></td>
+            </tr>
+            
+            <tr>
+                <td><input type="submit" value="Login"></td>
+            </tr>
+        </table>
+    </div>
+</form>
+{% endblock %}

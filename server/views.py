@@ -9,14 +9,20 @@ def login(request):
         username = request.POST["uname"]
         password = request.POST["passwd"]
 
-        if username == 'McSam' and password == 'password':
-            return JsonResponse({'logged in successfully.'})
+
+        if username == 'mcsam' and password == 'password':
+            print("Done")
+            return JsonResponse({'msg':'logged in successfully.'})
         
     return render(request, "login.html")
     
-    # return JsonResponse({'Wrong username or password.'})
-    
 
 def signup(request):
-    return JsonResponse({'msg':'Working properly'})
-    ...
+    username = request.POST["uname"]
+    email = request.POST["email"]
+    password = request.POST["passwd"]
+    
+    if request.POST:
+        ...
+
+    return render(request, "signup.html")
