@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="/login" method="POST">
+<form action="/signup/" method="POST">
     {% csrf_token %}
     <div algin="center">
         <table>
+            <tr>
+                {% for message in messages %}
+                <td><h3>{{message}}</h3></td>
+                {% endfor %}
+            </tr>
             <tr>
                 <td>First name: </td>
                 <td><input type="fname" name="fname" id="fname"></td>
@@ -23,14 +28,15 @@
             </tr>
             <tr>
                 <td>Password: </td>
-                <td><input type="password1" name="passwd2" id="pass1"></td>
+                <td><input type="password" name="passwd1" id="pass1"></td>
             </tr>
             <tr>
                 <td>Confirm password: </td>
-                <td><input type="password2" name="passwd2" id="pass2"></td>
+                <td><input type="password" name="passwd2" id="pass2"></td>
             </tr>
             
             <tr>
+                <td></td>
                 <td><input type="submit" value="Login"></td>
             </tr>
         </table>
