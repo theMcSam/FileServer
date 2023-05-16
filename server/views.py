@@ -13,7 +13,7 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return render(request, "home.html", {"name":username})
+            return render(request, "dashboard.html", {"name":username})
         
     return render(request, "login.html")
     
