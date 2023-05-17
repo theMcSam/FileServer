@@ -1,45 +1,22 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<form action="/signup/" method="POST">
-    {% csrf_token %}
-    <div algin="center">
-        <table>
-            <tr>
-                {% for message in messages %}
-                <td><h3>{{message}}</h3></td>
-                {% endfor %}
-            </tr>
-            <tr>
-                <td>First name: </td>
-                <td><input type="fname" name="fname" id="fname"></td>
-            </tr>
-            <tr>
-                <td>Last name: </td>
-                <td><input type="text" name="lname" id="lname"></td>
-            </tr>
-            <tr>
-                <td>Username: </td>
-                <td><input type="text" name="uname" id="name"></td>
-            </tr>
-            <tr>
-                <td>Email: </td>
-                <td><input type="email" name="email" id="email"></td>
-            </tr>
-            <tr>
-                <td>Password: </td>
-                <td><input type="password" name="passwd1" id="pass1"></td>
-            </tr>
-            <tr>
-                <td>Confirm password: </td>
-                <td><input type="password" name="passwd2" id="pass2"></td>
-            </tr>
-            
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Login"></td>
-            </tr>
-        </table>
-    </div>
-</form>
+<div class="container pt-3 my-3 border">
+    <form action="/signup/" method="POST">
+        {% csrf_token %}
+        <h3 class="text-center">Sign Up</h3>
+            {{form|crispy}}
+        <div class="form-group mt-3">
+            <button class="btn btn-primary" type="submit">
+                Sign Up
+            </button>    
+        </div>
+    </form>
+
+    <small class="text-muted">
+        Already have an account? <a class="ml-2" href="{% url 'login' %}">Login</a>
+    </small>
+
+</div>
 {% endblock %}

@@ -1,31 +1,32 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
+from .forms import RegisterUserForm, LoginForm
 
 # Create your views here.
 
 def login(request):
 
     if  request.POST:
-        username = request.POST["uname"]
-        password = request.POST["passwd"]
+        username = request.POST["username"]
+        password = request.POST["password"]
 
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
             return render(request, "dashboard.html", {"name":username})
         
-    return render(request, "login.html")
+    return render(request, "login.html", {"form":LoginForm()})
     
 
 def signup(request):    
     if request.POST:
-        uname = request.POST["uname"]
+        uname = request.POST["username"]
         email = request.POST["email"]
-        password1 = request.POST["passwd1"]
-        password2 = request.POST["passwd2"]
-        fname = request.POST["fname"]
-        lname = request.POST["lname"]
+        password1 = request.POST["password1"]
+        password2 = request.POST["password2"]
+        fname = request.POST["first_name"]
+        lname = request.POST["last_name"]
         
         if password1 != password2:
             messages.info(request, "Passwords do not match!")
@@ -51,8 +52,8 @@ def signup(request):
         return redirect('login')
     
     
-    return render(request, "signup.html")
+    return render(request, "signup.html", {"form": RegisterUserForm()})
 
 def logout(request):
     auth.logout(request)
-    return redirect("/")
+    return redirect("/login")
