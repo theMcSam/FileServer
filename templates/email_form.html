@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags%}
+
+{% block title %}Share A File{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="container pt-3 p-3 my-3 border">
+        <div class="container">
+            <form action="{% url 'send_mail' file.id %}" method="POST">
+                {% csrf_token %}
+                <p class="card-text">
+                    File Attachment: <i class="fa fa-paperclip"></i> 
+                    <a href="/download/{{file.id}}">{{file_name}}</a>
+                </p>
+                {{form | crispy}}
+                <div class="form-group mt-3">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-paper-plane"></i> | Send
+                    </button> 
+                </div>
+            </form>
+        </div>
+    </div>
+{% else %}
+<h1 align="center">You are not authenticated!</h1>
+{% endif %}
+{% endblock %}

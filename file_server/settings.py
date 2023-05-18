@@ -143,3 +143,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Django SMTP settings
+# settings.py
+
+# Email backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# SMTP email settings (example for Gmail)
+EMAIL_HOST =  os.environ.get("EMAIL_HOST") # 'smtp.gmail.com'
+EMAIL_PORT = os.environ.get("EMAIL_PORT") #587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")

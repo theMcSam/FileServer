@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from .forms import RegisterUserForm, LoginForm
+from fileApp.models import File
 
 # Create your views here.
 
@@ -14,7 +15,8 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return render(request, "dashboard.html", {"name":username})
+
+            return redirect("/dashboard")
         
     return render(request, "login.html", {"form":LoginForm()})
     
@@ -57,3 +59,10 @@ def signup(request):
 def logout(request):
     auth.logout(request)
     return redirect("/login")
+
+def dashboard(request):
+    files = File.objects.all()
+    return render(request, "dashboard.html", {"files": files})
+
+def home(request):
+    return redirect("dashboard")
