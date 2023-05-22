@@ -8,6 +8,7 @@
     <form action="/login" method="POST">
         {% csrf_token %}
         <h3 class="text-center">Login</h3>
+        {% include "flash_message.html"%}
             {{form|crispy}}
             <div class="form-group mt-3">
                 <button class="btn btn-primary" type="submit">
@@ -17,7 +18,7 @@
     </form>
 
     <small class="text-muted">
-        Forgot password? <a class="ml-2" href="{% url 'signup' %}">Reset Password</a>
+        Forgot password? <a class="ml-2" href="{% url 'resetpassword' %}">Reset Password</a>
     </small>
  
     <div class="border-top pt-3">
