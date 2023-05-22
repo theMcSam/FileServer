@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
-from .forms import RegisterUserForm, LoginForm
+from .forms import RegisterUserForm, LoginForm, PasswordResetForm
 from fileApp.models import File
 
 # Create your views here.
@@ -66,3 +66,6 @@ def dashboard(request):
 
 def home(request):
     return redirect("dashboard")
+
+def password_reset(request):
+    return render(request, "password_rest.html", {"form": PasswordResetForm()})
