@@ -89,7 +89,10 @@ def dashboard(request):
     return render(request, "dashboard.html", {"files": files})
 
 def home(request):
-    return redirect("dashboard")
+    return redirect("/dashboard")
+
+def webroot(request):
+    return redirect("/login")
 
 def password_reset(request):
     if request.POST:
