@@ -35,7 +35,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'server.apps.ServerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fileApp',
+    'server.apps.ServerConfig',
     'crispy_forms',
     'crispy_bootstrap4',
 ]
@@ -97,6 +97,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -145,7 +146,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Django SMTP settings
-# settings.py
 
 # Email backend
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

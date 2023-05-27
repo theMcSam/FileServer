@@ -1,24 +1,34 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
-from .forms import RegisterUserForm, LoginForm, PasswordResetForm
+from .forms import RegisterUserForm, LoginForm, PasswordResetForm, ChangePasswordForm
 from fileApp.models import File
 from mailer import send_email
+from django.contrib.sites.shortcuts import get_current_site
+import hashlib
+
 
 # Create your views here.
 
 def login(request):
 
-    if  request.POST:
+    if request.POST:
         username = request.POST["username"]
         password = request.POST["password"]
 
         user = auth.authenticate(username=username, password=password)
+
+        is_activated = User.objects.get(username=username)
+
+        if is_activated.is_active != True:
+            messages.info(request, "Please go to your mail and click on the link to activate your account.")
+            return redirect("/login")
+
         if user is not None:
             auth.login(request, user)
             return redirect("/dashboard")
-        else:    
-            messages.info(request, "Wrong username or password.")
+               
+        messages.info(request, "Wrong username or password.")
 
     return render(request, "login.html", {"form":LoginForm()})
     
@@ -51,8 +61,19 @@ def signup(request):
             first_name = fname,
             last_name = lname
         )
+        user.is_active = False
         user.save()
 
+        user_to_activate = User.objects.get(email=email)
+        hash = hashlib.sha256()
+        hash.update(f"{user_to_activate.username}{user_to_activate.last_name}{user_to_activate.date_joined}".encode('utf-8'))
+        link = f"{get_current_site(request).domain}/activate/{user_to_activate.username}/{hash.hexdigest()}"
+        send_email(to=email, 
+                       body=f"Click  on the link to activate your account. Link: {link}",
+                       subject="Activate your account.")
+
+
+        messages.success(request, "Sign Up sucessful.")
         return redirect('login')
     
     
@@ -60,7 +81,7 @@ def signup(request):
 
 def logout(request):
     auth.logout(request)
-    messages.info("Successfully Logged Out")
+    messages.info(request, "Successfully Logged Out")
     return redirect("/login")
 
 def dashboard(request):
@@ -73,9 +94,56 @@ def home(request):
 def password_reset(request):
     if request.POST:
         email = request.POST["email"]
+        user = User.objects.filter(email=email)
 
-        if User.objects.filter(email=email).exists():
-            send_email(to=email, body="")
+        if user.exists():
+            user = User.objects.get(email=email)
+            hash = hashlib.sha256()
+            hash.update(f"{user.first_name}{user.last_name}{user.date_joined}".encode('utf-8'))
+            link = f"{get_current_site(request).domain}/token/{user.username}/{hash.hexdigest()}"
+            send_email(to=email, 
+                       body=f"Click  on the link to reset your password. Link: {link}",
+                       subject="Reset your password.")
+            print("[+] Sent ")
             messages.info(request, f"Check {email} for password reset link.")
 
     return render(request, "password_reset.html", {"form": PasswordResetForm()})
+
+def password_reset_confirm(request, token, user):
+    if request.POST:
+        user_object = User.objects.get(username=user)
+        
+        if user_object:
+            hash = hashlib.sha256()
+            hash.update(f"{user_object.first_name}{user_object.last_name}{user_object.date_joined}".encode('utf-8'))
+            orgial_token = hash.hexdigest()
+
+            if token == orgial_token:
+                password = request.POST["password"]
+                user_object.set_password(password)
+                user_object.save()
+                messages.success(request, "Password Changed Successfully.")
+                return render(request, "password_reset_form.html", {"form": ChangePasswordForm()})
+
+            
+            messages.info(request, "Inavlid Password Reset Token.")
+
+    return render(request, "password_reset_form.html", {"form": ChangePasswordForm()})
+
+
+def activate_account(request, token, user):
+    user_obj = User.objects.get(username = user)
+
+    if user_obj:
+        hash = hashlib.sha256()
+        hash.update(f"{user_obj.username}{user_obj.last_name}{user_obj.date_joined}".encode('utf-8'))
+        orgial_token = hash.hexdigest()
+
+        if token == orgial_token:
+            user_obj.is_active = True
+            user_obj.save()
+            messages.success(request, "Account Activated.")
+            return render(request, "account_activated.html")
+
+        messages.info(request, "Inavlid Account activation Reset Token.")
+    return redirect("/login")

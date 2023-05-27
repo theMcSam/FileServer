@@ -17,3 +17,8 @@ class LoginForm(forms.Form):
 
 class PasswordResetForm(forms.Form):
     email = forms.CharField()
+
+class ChangePasswordForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('password1', 'password2')

@@ -7,5 +7,7 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('logout', views.logout, name='logout'),
     path('dashboard', views.dashboard, name="dashboard"),
-    path('resetpassword', views.password_reset, name='resetpassword')
+    path('resetpassword', views.password_reset, name='resetpassword'),
+    path('token/<str:user>/<str:token>', views.password_reset_confirm, name='token'),
+    path('activate/<str:user>/<str:token>', views.activate_account, name="activate")
 ]
