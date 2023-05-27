@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
@@ -14,7 +13,8 @@
                 <div class="card-body">
                     <p class="card-text">Date Uploaded: {{file.date_uploaded}}</p>
                     <hr>
-                    <h3 class="card-title">{{file.file.name}}</h3>
+                    {% load custom_filters %}
+                    <h3 class="card-title">{{file.file.name|extract_filename}}</h3>
                     <p class="card-text">{{file.description}}</p>
                     <hr>
                     <a href="download/{{file.id}}/" class="btn btn-primary">

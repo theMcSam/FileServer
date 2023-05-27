@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q
 from mailer import send_email
 from django.http import FileResponse
 from django.http import HttpResponse
@@ -31,13 +32,21 @@ class DownloadView(View):
             return response
 
 def search_file(request):
-    ...
+    query = request.GET.get('search')
+    
+    if query:
+        files = File.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+    else:
+        files = File.objects.none()
+    
+    return render(request, 'search.html', {'files': files})
 
 def email_form(request, id):
     file = get_object_or_404(File, pk=id)
     file_name = str(file.file.name).split("/")[1]
     return render(request, "email_form.html", {"form": EmailAttachementForm(), "file": file, "file_name":file_name})
-    ...
 
 def send_mail(request, id):
     mail_to = request.POST["mail_to"]

@@ -8,7 +8,7 @@
     <form action="/login" method="POST">
         {% csrf_token %}
         <h3 class="text-center">Login</h3>
-        {% include "flash_message.html"%}
+        {% include "fileApp/flash_message.html"%}
             {{form|crispy}}
             <div class="form-group mt-3">
                 <button class="btn btn-primary" type="submit">

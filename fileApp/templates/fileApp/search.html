@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<br>
+<br>
+    {% if files %}
+            {% for file in files %}
+            <div class="container" style="width: 50rem;">
+                <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">Date Uploaded: {{file.date_uploaded}}</p>
+                            <hr>
+                            <h3 class="card-title">{{file.file.name}}</h3>
+                            <p class="card-text">{{file.description}}</p>
+                            <hr>
+                            <a href="download/{{file.id}}/" class="btn btn-primary">
+                                <i class="fa fa-cloud-download"></i> | Download
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="preview/{{file.id}}" class="btn btn-primary">
+                                <i class="fa fa-file-o"></i> | Preview
+                            </a>&nbsp;&nbsp;
+                            <a href="email_form/{{file.id}}" class="btn btn-primary">
+                                <i class="fa fa-share"></i> | Share </a>
+                        </div>
+                    </div>
+            </div>
+            <br>
+            {% endfor %}
+    {% else %}
+    <div class="container pt-3 my-3 border">
+        <h1 align="center">No such file found! </h1>
+    </div>
+    {% endif %}
+
+{% else %}
+    <div class="container pt-3 my-3 border">
+        <h1 align="center">You are not authenticated! </h1>
+    </div>
+{% endif %}
+
+{% endblock %}
