@@ -19,7 +19,7 @@ from django.urls import path, include
 from server.views import webroot
 
 urlpatterns = [
-    path("/", webroot, name="webroot"),
+    path("", webroot, name="webroot"),
     path('', include('server.urls')),
     path('', include('fileApp.urls')),
     path('admin/', admin.site.urls),
