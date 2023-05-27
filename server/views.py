@@ -18,19 +18,19 @@ def login(request):
 
         user = auth.authenticate(username=username, password=password)
 
-        is_activated = User.objects.get(username=username)
-
-        if is_activated.is_active != True:
-            messages.info(request, "Please go to your mail and click on the link to activate your account.")
-            return redirect("/login")
-
         if user is not None:
+            is_activated = User.objects.get(username=username)
+
+            if is_activated.is_active != True:
+                messages.info(request, "Please go to your mail and click on the link to activate your account.")
+                return redirect("/login")
+
             auth.login(request, user)
             return redirect("/dashboard")
                
         messages.info(request, "Wrong username or password.")
 
-    return render(request, "server/login.html", {"form":LoginForm()})
+    return render(request, "login.html", {"form":LoginForm()})
     
 
 def signup(request):    
@@ -77,7 +77,7 @@ def signup(request):
         return redirect('login')
     
     
-    return render(request, "server/signup.html", {"form": RegisterUserForm()})
+    return render(request, "signup.html", {"form": RegisterUserForm()})
 
 def logout(request):
     auth.logout(request)
@@ -128,7 +128,7 @@ def password_reset_confirm(request, token, user):
             
             messages.info(request, "Inavlid Password Reset Token.")
 
-    return render(request, "server/password_reset_form.html", {"form": ChangePasswordForm()})
+    return render(request, "password_reset_form.html", {"form": ChangePasswordForm()})
 
 
 def activate_account(request, token, user):
@@ -143,7 +143,7 @@ def activate_account(request, token, user):
             user_obj.is_active = True
             user_obj.save()
             messages.success(request, "Account Activated.")
-            return render(request, "server/account_activated.html")
+            return render(request, "account_activated.html")
 
         messages.info(request, "Inavlid Account activation Reset Token.")
     return redirect("/login")
