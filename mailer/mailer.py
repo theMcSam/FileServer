@@ -21,5 +21,7 @@ def send_email(**email_details):
             email.attach(filename=file_name.split("/")[1] , content=file.read(), mimetype=mime)
 
     # Send the email
-    email.send()
+    if email.send():
+        return True
+    return False
     

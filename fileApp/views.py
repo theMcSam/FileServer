@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Q
 from mailer import send_email
 from django.http import FileResponse
 from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
 from file_server.settings import BASE_DIR
 from .models import File
 from .forms import EmailAttachementForm
@@ -36,7 +37,7 @@ def search_file(request):
     
     if query:
         files = File.objects.filter(
-            Q(title__icontains=query) | Q(description__icontains=query)
+            Q(file__icontains=query) | Q(description__icontains=query)
         )
     else:
         files = File.objects.none()
@@ -55,15 +56,16 @@ def send_mail(request, id):
 
     file = get_object_or_404(File, pk=id)
     file_path = os.path.join(BASE_DIR, str(file.file))
+    file_name = str(file.file.name).split("/")[1]
 
     if send_email(to=mail_to, attachment=file_path, 
                   file_name=str(file.file.name),
                    subject=subject, body=body, file_obj=file):
         file.number_of_emails += 1
         file.save()
-        return HttpResponse("<h1>Mail Sent Successfully<h1>")
+        return render(request, "attachment_sent.html", {"mailsent": True})
     
-    return HttpResponse("<h1>Unable to send Mail<h1>")
+    return render(request, "attachment_sent.html", {"mailsent": False})
 
 def preview_file(request, id):
     file = get_object_or_404(File,pk=id)

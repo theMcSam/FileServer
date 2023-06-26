@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Atachment Sent Successfully{% endblock %}
+
+{% block content %}
+{% if mailsent %}
+    <div class="container pt-3 my-3 border">
+        {% include "flash_message.html"%}
+        <div align="center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/512px-Eo_circle_green_checkmark.svg.png?20200417132424">
+            <h1>Mail Sent</h1>
+        </div>
+    </div>
+{% else %}
+    <div class="container pt-3 my-3 border">
+        {% include "flash_message.html"%}
+        <div align="center">
+            <img src="https://e7.pngegg.com/pngimages/630/77/png-clipart-check-mark-computer-icons-symbol-miscellaneous-logo.png">
+            <h1>Unable to send Email Attachment!</h1>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
