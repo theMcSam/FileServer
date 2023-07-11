@@ -119,10 +119,10 @@ def password_reset_confirm(request, token, user):
         if user_object:
             hash = hashlib.sha256()
             hash.update(f"{user_object.first_name}{user_object.last_name}{user_object.date_joined}".encode('utf-8'))
-            orgial_token = hash.hexdigest()
+            orginal_token = hash.hexdigest()
 
-            if token == orgial_token:
-                password = request.POST["password"]
+            if token == orginal_token:
+                password = request.POST["password1"]
                 user_object.set_password(password)
                 user_object.save()
                 messages.success(request, "Password Changed Successfully.")
@@ -140,9 +140,9 @@ def activate_account(request, token, user):
     if user_obj:
         hash = hashlib.sha256()
         hash.update(f"{user_obj.username}{user_obj.last_name}{user_obj.date_joined}".encode('utf-8'))
-        orgial_token = hash.hexdigest()
+        orginal_token = hash.hexdigest()
 
-        if token == orgial_token:
+        if token == orginal_token:
             user_obj.is_active = True
             user_obj.save()
             messages.success(request, "Account Activated.")
